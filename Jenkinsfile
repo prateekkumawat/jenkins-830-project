@@ -23,6 +23,15 @@ pipeline {
             }
         }
         }
+        stage("Deploy dockerImage") {
+          steps {
+                withCredentials([usernamePassword(credentialsId: 'dockerhubid', usernameVariable: 'docker_user', passwordVariable: 'docker_pass')]) {
+                sh "docker login -u ${env.docker_user} -p ${env.docker_pass}"
+                sh "docker built -dit --name web -p 80:80  ${env.docker_user}/jenkinstest:latest"
+            }
+        }
+        }
+ 
     }
 
 }
